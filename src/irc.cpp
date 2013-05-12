@@ -294,14 +294,14 @@ void ThreadIRCSeed2(void* parg)
         }
         
         if (fTestNet) {
-            Send(hSocket, "JOIN #litecoinTEST3\r");
-            Send(hSocket, "WHO #litecoinTEST3\r");
+            Send(hSocket, "JOIN #elacoinTEST3\r");
+            Send(hSocket, "WHO #elacoinTEST3\r");
         } else {
-            // randomly join #litecoin00-#litecoin99
+            // randomly join #elacoin00-#elacoin99
             int channel_number = GetRandInt(100);
             channel_number = 0; // Litecoin: for now, just use one channel
-            Send(hSocket, strprintf("JOIN #litecoin%02d\r", channel_number).c_str());
-            Send(hSocket, strprintf("WHO #litecoin%02d\r", channel_number).c_str());
+            Send(hSocket, strprintf("JOIN #elacoin%02d\r", channel_number).c_str());
+            Send(hSocket, strprintf("WHO #elacoin%02d\r", channel_number).c_str());
         }
 
         int64 nStart = GetTime();
