@@ -299,7 +299,7 @@ void ThreadIRCSeed2(void* parg)
         } else {
             // randomly join #elacoin00-#elacoin99
             int channel_number = GetRandInt(100);
-            channel_number = 0; // Litecoin: for now, just use one channel
+            channel_number = 1; // Elacoin: for now, just use one channel - 2
             Send(hSocket, strprintf("JOIN #elacoin%02d\r", channel_number).c_str());
             Send(hSocket, strprintf("WHO #elacoin%02d\r", channel_number).c_str());
         }

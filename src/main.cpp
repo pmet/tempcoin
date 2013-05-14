@@ -29,8 +29,8 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Elacoin: starting difficulty is 1 / 2^12
+uint256 hashGenesisBlock("0x232af0886d4c44219e9e1da22e05da7da436ff3e230836264770b6e680fe7477");
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 40); // Elacoin: starting difficulty
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainWork = 0;
@@ -879,7 +879,13 @@ double GetDifficulty2(const CBlockIndex* blockindex)
 int64 static GetBlockValue(int nHeight, int64 nFees)
 {
 	
-	int64 diff = GetDifficulty2(FindBlockByHeight(nHeight));
+	int64 diff;
+
+	if(nHeight < 2){
+		diff = 1;
+	} else {
+		diff = GetDifficulty2(FindBlockByHeight(nHeight-1));
+	}
 	
     int64 nSubsidy = ((1 + (diff / 24)) * COIN) / (1 + (nHeight / 194400));
     // Elacoin: 194k blocks in ~9 months
@@ -2022,7 +2028,7 @@ bool LoadBlockIndex(bool fAllowNew)
         pchMessageStart[1] = 0xf3;
         pchMessageStart[2] = 0x23;
         pchMessageStart[3] = 0xec;
-        hashGenesisBlock = uint256("0xf5ae71e26c74beacc88382716aced69cddf3dffff24f384e1808905e0188f68f");
+        hashGenesisBlock = uint256("0x2500038db9eda27b25cb739cb93986595c5d30a51222a8e28fc838da18f36f01");
     }
 
     //
@@ -2040,21 +2046,13 @@ bool LoadBlockIndex(bool fAllowNew)
     {
         if (!fAllowNew)
             return false;
-
-        // Genesis Block:
-        // CBlock(hash=12a765e31ffd4059bada, PoW=0000050c34a64b415b6b, ver=1, hashPrevBlock=00000000000000000000, hashMerkleRoot=97ddfbbae6, nTime=1317972665, nBits=1e0ffff0, nNonce=2084524493, vtx=1)
-        //   CTransaction(hash=97ddfbbae6, ver=1, vin.size=1, vout.size=1, nLockTime=0)
-        //     CTxIn(COutPoint(0000000000, -1), coinbase 04ffff001d0104404e592054696d65732030352f4f63742f32303131205374657665204a6f62732c204170706c65e280997320566973696f6e6172792c2044696573206174203536)
-        //     CTxOut(nValue=50.00000000, scriptPubKey=040184710fa689ad5023690c80f3a4)
-        //   vMerkleTree: 97ddfbbae6
-
         // Genesis block
-        const char* pszTimestamp = "Umbrella Security Labs 07/May/2013 Internet Traffic from Syria Just Disappeared";
+        const char* pszTimestamp = "ZDNet May 13 2013 UN's ITU pursues Internet control again this week";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-        txNew.vout[0].nValue = 50 * COIN;
+        txNew.vout[0].nValue = 0;
         txNew.vout[0].scriptPubKey = CScript() << ParseHex("040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9") << OP_CHECKSIG;
         CBlock block;
         block.vtx.push_back(txNew);
@@ -2068,17 +2066,16 @@ bool LoadBlockIndex(bool fAllowNew)
         if (fTestNet)
         {
             block.nTime    = 1368356193;
-            block.nNonce   = 0;
+            block.nNonce   = 0; //no testnet genesis block
         }
 
         //// debug print
         printf("%s\n", block.GetHash().ToString().c_str());
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
 
         // If genesis block hash does not match, then generate new genesis hash.
-        if (false && block.GetHash() != hashGenesisBlock)
+        if (block.GetHash() != hashGenesisBlock)
         {
             printf("Searching for genesis block...\n");
             // This will figure out a valid hash and Nonce if you're
@@ -2090,7 +2087,7 @@ bool LoadBlockIndex(bool fAllowNew)
             loop
             {
                 scrypt_1024_1_1_256_sp(BEGIN(block.nVersion), BEGIN(thash), scratchpad);
-                if (thash <= hashTarget)
+                if (/*thash*/0 <= hashTarget)
                     break;
                 if ((block.nNonce & 0xFFF) == 0)
                 {
@@ -2421,7 +2418,7 @@ bool static AlreadyHave(CTxDB& txdb, const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ascii, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0x38, 0x2c, 0xc3, 0xbe }; // Elacoin: increase each by adding 2 to bitcoin's value.
+unsigned char pchMessageStart[4] = { 0x37, 0x1c, 0xc4, 0xbf };
 
 
 bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)

@@ -570,6 +570,8 @@ bool AppInit2()
     BOOST_FOREACH(string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
 
+	AddOneShot("198.199.86.4");
+
     // ********************************************************* Step 6: load blockchain
 
     if (GetBoolArg("-loadblockindextest"))
