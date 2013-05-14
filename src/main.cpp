@@ -30,7 +30,7 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0x521d2bc9fdb2534f26e5df423db7a64da14892993e4b4f0329c829a5e8194305");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 10000000); // Elacoin: starting difficulty
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Elacoin: starting difficulty
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainWork = 0;
