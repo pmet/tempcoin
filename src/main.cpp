@@ -30,7 +30,7 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0x232af0886d4c44219e9e1da22e05da7da436ff3e230836264770b6e680fe7477");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 40); // Elacoin: starting difficulty
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 10000000); // Elacoin: starting difficulty
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainWork = 0;
@@ -2061,7 +2061,7 @@ bool LoadBlockIndex(bool fAllowNew)
         block.nVersion = 1;
         block.nTime    = 1368356193;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 0;
+        block.nNonce   = 1;
 
         if (fTestNet)
         {
@@ -2087,7 +2087,7 @@ bool LoadBlockIndex(bool fAllowNew)
             loop
             {
                 scrypt_1024_1_1_256_sp(BEGIN(block.nVersion), BEGIN(thash), scratchpad);
-                if (/*thash*/0 <= hashTarget)
+                if (thash <= hashTarget)
                     break;
                 if ((block.nNonce & 0xFFF) == 0)
                 {
