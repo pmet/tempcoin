@@ -29,7 +29,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x232af0886d4c44219e9e1da22e05da7da436ff3e230836264770b6e680fe7477");
+uint256 hashGenesisBlock("0x521d2bc9fdb2534f26e5df423db7a64da14892993e4b4f0329c829a5e8194305");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 10000000); // Elacoin: starting difficulty
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2047,7 +2047,7 @@ bool LoadBlockIndex(bool fAllowNew)
         if (!fAllowNew)
             return false;
         // Genesis block
-        const char* pszTimestamp = "ZDNet May 13 2013 UN's ITU pursues Internet control again this week";
+        const char* pszTimestamp = "May 14th 3:37am, we try again";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -2061,7 +2061,7 @@ bool LoadBlockIndex(bool fAllowNew)
         block.nVersion = 1;
         block.nTime    = 1368356193;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 1;
+        block.nNonce   = 80322;
 
         if (fTestNet)
         {
