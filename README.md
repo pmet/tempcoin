@@ -1,4 +1,4 @@
-Elacoin - an elastic cryptocurrency
+Tempcoin - an elastic cryptocurrency
 
 Development process
 ===================
